@@ -29,6 +29,22 @@ workflows:
         echo $IOS_FIREBASE_SECRET | base64 --decode > $CM_BUILD_DIR/ios/Runner/GoogleService-Info.plist
       - find . -name "Podfile" -execdir pod install \;
       - flutter build ios --debug --no-codesign
+      
+      - name: Build debug apk
+  script: flutter build apk --debug
+      - name: Get Flutter packages
+  script: flutter packages pub get
+  - name: Flutter analyze
+  script: flutter analyze
+  - name: Flutter unit tests
+  script: flutter test
+  # For Android
+artifacts:
+  - build/*/outputs//.apk
+  - build/*/outputs//.aab
+  - build/*/outputs/*/mapping.txt
+  - flutter_drive.log
+  
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
